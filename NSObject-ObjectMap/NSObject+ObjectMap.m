@@ -610,7 +610,7 @@ static const char _base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
         else if ([NSObject isData:[obj valueForKey:key]]){
             [dict setObject:[NSObject encodeBase64WithData:[obj valueForKey:key]] forKey:key];
         }
-        else if ([self isURL:[obj valueForKey:key]]){
+        else if ([[obj valueForKey:key] isKindOfClass:[NSURL class]]){
             [dict setObject:[(NSURL *)[obj valueForKey:key]  absoluteString] forKey:key];
         }
         else if ([[obj valueForKey:key] isKindOfClass:[UIImage class]]){
@@ -622,6 +622,7 @@ static const char _base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
         else {
             [dict setObject:[self dictionaryWithPropertiesOfObject:[obj valueForKey:key]] forKey:key];
         }
+    }
     
     return [NSDictionary dictionaryWithDictionary:dict];
 }
