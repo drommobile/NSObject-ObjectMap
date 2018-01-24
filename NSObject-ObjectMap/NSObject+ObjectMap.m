@@ -589,8 +589,12 @@ static const char _base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
     
     for (NSInteger i = 0; i < propertiesArray.count; i++) {
         NSString *key = propertiesArray[i];
-        
-        if (![obj valueForKey:key]) {
+        if ([obj respondsToSelector:@selector(valueForKey:)]) {
+            if (![obj valueForKey:key]) {
+                [dict setObject:@"(null)" forKey:key];
+                continue;
+            }
+        } else {
             continue;
         }
         
@@ -606,10 +610,18 @@ static const char _base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
         else if ([NSObject isData:[obj valueForKey:key]]){
             [dict setObject:[NSObject encodeBase64WithData:[obj valueForKey:key]] forKey:key];
         }
+        else if ([self isURL:[obj valueForKey:key]]){
+            [dict setObject:[(NSURL *)[obj valueForKey:key]  absoluteString] forKey:key];
+        }
+        else if ([[obj valueForKey:key] isKindOfClass:[UIImage class]]){
+            [dict setObject:@"Здесь UIImage для ColorImage" forKey:key];
+        }
+        else if ([[obj valueForKey:key] isKindOfClass:[UIColor class]]) {
+            [dict setObject:@"Здесь UIColor для Color" forKey:key];
+        }
         else {
             [dict setObject:[self dictionaryWithPropertiesOfObject:[obj valueForKey:key]] forKey:key];
         }
-    }
     
     return [NSDictionary dictionaryWithDictionary:dict];
 }
