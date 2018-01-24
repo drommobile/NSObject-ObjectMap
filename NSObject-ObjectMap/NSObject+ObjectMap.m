@@ -589,12 +589,8 @@ static const char _base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
     
     for (NSInteger i = 0; i < propertiesArray.count; i++) {
         NSString *key = propertiesArray[i];
-        if ([obj respondsToSelector:@selector(valueForKey:)]) {
-            if (![obj valueForKey:key]) {
-                [dict setObject:@"(null)" forKey:key];
-                continue;
-            }
-        } else {
+        if (![obj valueForKey:key]) {
+            [dict setObject:@"(null)" forKey:key];
             continue;
         }
         
@@ -643,10 +639,10 @@ static const char _base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
     
     free(properties);
     
-    NSString *superClassName = [[obj superclass] nameOfClass];
-    if (![superClassName isEqualToString:@"NSObject"]) {
-        [props addObjectsFromArray:[NSObject propertiesArrayFromObject:[[NSClassFromString(superClassName) alloc] init]]];
-    }
+//    NSString *superClassName = [[obj superclass] nameOfClass];
+//    if (![superClassName isEqualToString:@"NSObject"]) {
+//        [props addObjectsFromArray:[NSObject propertiesArrayFromObject:[[NSClassFromString(superClassName) alloc] init]]];
+//    }
     
     return props;
 }
